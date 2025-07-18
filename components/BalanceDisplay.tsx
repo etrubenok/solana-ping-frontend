@@ -10,15 +10,26 @@ export const BalanceDisplay: FC = () => {
 
     useEffect(() => {
         const upadateBalance = async () => {
-            if (publicKey) {
-                connection.onAccountChange(publicKey, (accountInfo) => {
-                    console.log('Account changed:', accountInfo);
-                    setBalance(accountInfo.lamports);
-                });
-                const balance = await connection.getBalance(publicKey);
-                setBalance(balance);
+            if (connection !== null && publicKey != null) {
+                try {
+                    connection.onAccountChange(publicKey, (accountInfo) => {
+                        console.log('Account changed:', accountInfo);
+                        setBalance(accountInfo.lamports);
+                    }, {
+                        commitment: 'confirmed',
+                        encoding: 'jsonParsed',
+                    });
+                    
+                    const balance = await connection.getBalance(publicKey);
+                    setBalance(balance);
+                } catch (error) {
+                    console.error("Error retrieving balance:", error);
+                }
+            } else {
+                console.warn("Connection or public key is not set");
             }
         };
+
         upadateBalance();
     }, [connection, publicKey]);
 
