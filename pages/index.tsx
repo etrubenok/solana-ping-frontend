@@ -22,6 +22,7 @@ const Home: NextPage = (props) => {
         <div className={styles.AppBody}>
           <PingButton />
         </div>
+        <BalanceDisplay />
       </WalletContextProvider >
     </div>
   );
